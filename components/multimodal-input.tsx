@@ -24,7 +24,7 @@ import { SuggestedActions } from './suggested-actions';
 import equal from 'fast-deep-equal';
 import type { UseChatHelpers } from '@ai-sdk/react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowDown } from 'lucide-react';
+import { ArrowDown, Tag } from 'lucide-react';
 import { useScrollToBottom } from '@/hooks/use-scroll-to-bottom';
 import type { VisibilityType } from './visibility-selector';
 import TagWithIcon from './Tags/TagWithIcon';
@@ -38,6 +38,7 @@ import {
 import ThinkMode from './Tags/ThinkMode';
 import styles from './GradientCardStatic/GradientCard.module.scss';
 import ListeningLoader from './Listening/ListeningLoader';
+import { TagSelector } from './Tags/TagSelector';
 
 /**
  * Khai báo global cho window
@@ -457,7 +458,7 @@ function PureMultimodalInput({
 
       {/** Smart prompts suggestions */}
 
-      <div className="flex flex-row flex-grow min-h-0 overflow-hidden overflow-x-auto gap-2 bg-transparent py-2 ">
+      {/* <div className="flex flex-row flex-grow min-h-0 overflow-hidden overflow-x-auto gap-2 bg-transparent py-2 ">
         {LIST_TAGS.map((tag, index) => (
           <TagWithIcon
             // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
@@ -495,7 +496,13 @@ function PureMultimodalInput({
             is_active={suggested_mode === tag.type}
           />
         ))}
-      </div>
+      </div> */}
+      <TagSelector
+        LIST_TAGS={LIST_TAGS}
+        suggested_mode={suggested_mode}
+        setSuggestedMode={setSuggestedMode}
+        setInput={setInput}
+      />
 
       <input
         type="file"
@@ -529,107 +536,105 @@ function PureMultimodalInput({
         </div>
       )}
 
-      <div className="flex justify-center items-center z-10">
-        <div className={`w-full ${styles.card}`}>
-          <Textarea
-            data-testid="multimodal-input"
-            ref={TEXT_AREA_REF}
-            placeholder="Send a message..."
-            value={input}
-            onChange={handleInput}
-            className={cx(
-              'min-h-6 max-h-[calc(75dvh)] overflow-hidden resize-none rounded-2xl !text-base bg-muted pb-14 border-none dark:border-zinc-700 dark:bg-zinc-950 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-ring-0 focus-visible:ring-offset-0',
-              className,
-            )}
-            rows={2}
-            autoFocus
-            onKeyDown={(event) => {
-              if (
-                event.key === 'Enter' &&
-                !event.shiftKey &&
-                !event.nativeEvent.isComposing
-              ) {
-                event.preventDefault();
+      {/* <div className="flex justify-center items-center z-10">
+        <div className={`w-full ${styles.card}`}> */}
+      <Textarea
+        data-testid="multimodal-input"
+        ref={TEXT_AREA_REF}
+        placeholder="Send a message..."
+        value={input}
+        onChange={handleInput}
+        className={cx(
+          'min-h-6 max-h-[calc(75dvh)] relative z-10 overflow-hidden resize-none rounded-2xl !text-base bg-muted pb-14 border-none dark:border-zinc-700 dark:bg-zinc-950 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-ring-0 focus-visible:ring-offset-0',
+          className,
+        )}
+        rows={2}
+        autoFocus
+        onKeyDown={(event) => {
+          if (
+            event.key === 'Enter' &&
+            !event.shiftKey &&
+            !event.nativeEvent.isComposing
+          ) {
+            event.preventDefault();
 
-                if (status !== 'ready') {
-                  toast.error(
-                    'Please wait for the model to finish its response!',
-                  );
-                } else {
-                  submitForm();
-                }
+            if (status !== 'ready') {
+              toast.error('Please wait for the model to finish its response!');
+            } else {
+              submitForm();
+            }
+          }
+        }}
+      />
+
+      <div className="absolute bottom-3 left-3 w-fit flex items-center gap-2 flex-row justify-start rounded-full z-10">
+        <AttachmentsButton fileInputRef={FILE_INPUT_REF} status={status} />
+
+        <ThinkMode
+          onClick={() => setAiMode('think')}
+          is_active={ai_mode === 'think'}
+        />
+      </div>
+
+      <div className="absolute bottom-3 right-3 rounded-full w-fit flex flex-row justify-end z-10">
+        {!input && status !== 'submitted' ? (
+          <div
+            onClick={() => {
+              /**
+               * Nếu dang nghe thi dung, nguoc lai bat dau nghe
+               */
+              if (is_listening) {
+                RECOGNITION_REF.current?.stop(); // Dừng và sẽ kích hoạt .onresult
+              } else {
+                RECOGNITION_REF.current?.start(); // Bắt đầu nghe
+                setIsListening(true);
               }
             }}
-          />
-
-          <div className="absolute bottom-3 left-3 w-fit flex items-center gap-2 flex-row justify-start rounded-full">
-            <AttachmentsButton fileInputRef={FILE_INPUT_REF} status={status} />
-
-            <ThinkMode
-              onClick={() => setAiMode('think')}
-              is_active={ai_mode === 'think'}
-            />
-          </div>
-
-          <div className="absolute bottom-3 right-3 rounded-full w-fit flex flex-row justify-end">
-            {!input && status !== 'submitted' ? (
-              <div
-                onClick={() => {
-                  /**
-                   * Nếu dang nghe thi dung, nguoc lai bat dau nghe
-                   */
-                  if (is_listening) {
-                    RECOGNITION_REF.current?.stop(); // Dừng và sẽ kích hoạt .onresult
-                  } else {
-                    RECOGNITION_REF.current?.start(); // Bắt đầu nghe
-                    setIsListening(true);
-                  }
-                }}
-                className="p-2 bg-white rounded-full cursor-pointer"
-              >
-                {is_listening ? (
-                  <ListeningLoader />
-                ) : (
-                  <MicrophoneIcon className="size-5 text-black" />
-                )}
-              </div>
+            className="p-2 bg-white rounded-full cursor-pointer"
+          >
+            {is_listening ? (
+              <ListeningLoader />
             ) : (
-              <div>
-                {status === 'submitted' ? (
-                  // <StopButton stop={stop} setMessages={setMessages} />
-                  <div className="p-2 bg-zinc-500 text-black rounded-full cursor-pointer">
-                    {/* <StopCircleIcon className="size-5 text-black" /> */}
-                    <ArrowUpIcon
-                      size={20}
-                      // className="size-5 text-black"
-                    />
-                  </div>
-                ) : (
-                  // <SendButton
-                  //   input={input}
-                  //   submitForm={submitForm}
-                  //   uploadQueue={upload_queue}
-                  // />
-                  <button
-                    disabled={input.length === 0 || upload_queue.length > 0}
-                    // submitForm={submitForm}
-                    onClick={(event) => {
-                      event.preventDefault();
-                      submitForm();
-                    }}
-                    // uploadQueue={upload_queue}
-                    className="p-2 bg-white text-black rounded-full cursor-pointer"
-                  >
-                    <ArrowUpIcon
-                      size={20}
-                      // className="size-5 text-black flex-shrink-0"
-                    />
-                  </button>
-                )}
-              </div>
+              <MicrophoneIcon className="size-5 text-black" />
             )}
           </div>
-        </div>
+        ) : (
+          <div>
+            {status === 'submitted' ? (
+              // <StopButton stop={stop} setMessages={setMessages} />
+              <div className="p-2 bg-zinc-500 text-black rounded-full cursor-pointer">
+                {/* <StopCircleIcon className="size-5 text-black" /> */}
+                <ArrowUpIcon
+                  size={20}
+                  // className="size-5 text-black"
+                />
+              </div>
+            ) : (
+              // <SendButton
+              //   input={input}
+              //   submitForm={submitForm}
+              //   uploadQueue={upload_queue}
+              // />
+              <button
+                disabled={input.length === 0 || upload_queue.length > 0}
+                // submitForm={submitForm}
+                onClick={(event) => {
+                  event.preventDefault();
+                  submitForm();
+                }}
+                // uploadQueue={upload_queue}
+                className="p-2 bg-white text-black rounded-full cursor-pointer"
+              >
+                <ArrowUpIcon
+                  size={20}
+                  // className="size-5 text-black flex-shrink-0"
+                />
+              </button>
+            )}
+          </div>
+        )}
+        {/* </div>
+        </div> */}
       </div>
     </div>
   );
