@@ -119,7 +119,7 @@ function PureChatHeader({
               ROUTER.push('/');
               ROUTER.refresh();
             }}
-            className={`${!IS_CHAT_PAGE ? 'hidden' : 'flex'} cursor-pointer md:flex`}
+            className={`${!IS_CHAT_PAGE ? 'hidden' : 'flex'} cursor-pointer md:flex p-2`}
           >
             <PencilSquareIcon className="size-6" />
           </div>

@@ -16,10 +16,20 @@ export const metadata: Metadata = {
     images: [], // Tạm thời xóa thumbnail nên để trống
   },
 };
-
+/**
+ * Kiểu viewport cho trang web
+ */
 export const viewport = {
-  maximumScale: 1, // Disable auto-zoom on mobile Safari
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  minimumScale: 1,
+  userScalable: 'no',
+  height: 'device-height',
 };
+// export const viewport = {
+//   maximumScale: 1, // Disable auto-zoom on mobile Safari
+// };
 
 const geist = Geist({
   subsets: ['latin'],
@@ -78,7 +88,7 @@ export default async function RootLayout({
       <body className="antialiased">
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >

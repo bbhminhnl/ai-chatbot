@@ -6,7 +6,7 @@
 .card {
   //   padding: 1em;
   //   width: 120px; /* Kích thước card cố định */
-  background:black;
+  background: black;
   text-align: center;
   border-radius: 40px;
   margin: 0 auto;
@@ -22,7 +22,10 @@
   /** tuỳ theo deg sẽ chạy đến các vị trí của card theo góc tương ứng deg */
   background: conic-gradient(
     from var(--angle),
-   #FFFEF566
+    #fffef566,
+    #fffef566,
+    #fffef566,
+    #fffef566
   );
 
   top: 50%;
@@ -36,7 +39,7 @@
 }
 .card::before {
   filter: blur(80px);
-  // opacity: 0.5;
+  // opacity: 0.6;
 }
 /* Define the spin animation */
 @keyframes spin {
