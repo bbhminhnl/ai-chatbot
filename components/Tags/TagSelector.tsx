@@ -1,40 +1,69 @@
 import { CommandLineIcon, FlagIcon } from '@heroicons/react/24/solid';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 
-import PopoverTagMobile from '../Popover/PopoverTagMobile';
 import TagWithIcon from './TagWithIcon';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { useIsMobile } from '@/hooks/use-mobile-custom';
 import { useState } from 'react';
 
+/**
+ * Tách tag
+ */
+type ITag = {
+  /**
+   * Label tag
+   */
+  label: string;
+  /**
+   * Type tag
+   */
+  type: string;
+};
 export const TagSelector = ({
   LIST_TAGS,
   suggested_mode,
   setSuggestedMode,
   setInput,
 }: {
-  LIST_TAGS: any;
+  /**
+   * List tag
+   */
+  LIST_TAGS: ITag[];
+  /**
+   * Trạng thái tag
+   */
   suggested_mode: string;
+  /**
+   * Hàm set trạng thái tag
+   */
   setSuggestedMode: any;
-  setInput: any;
+  /**
+   * Hàm set giá trị input
+   */
+  setInput: (input: string | any) => void;
 }) => {
   /**
    * Trạng thái mobile
    */
   const IS_MOBILE = useIsMobile();
+
   /**
    * Trạng thái dropdown
    */
   const [show_dropdown, setShowDropdown] = useState(false);
+  /**
+   * Kiem tra trang thai mobile
+   */
+  if (IS_MOBILE === null) return null;
 
   /**
    *  Hàm click tag
    * @param tag
    * @returns
    */
-  const handleTagClick = (tag) => {
+  const handleTagClick = (tag: ITag) => {
     if (tag.type === suggested_mode) {
       setSuggestedMode('');
-      setInput((prev) => {
+      setInput((prev: any) => {
         const regex = new RegExp(`@${tag.type}\\s`);
         return prev.replace(regex, '');
       });
@@ -48,7 +77,7 @@ export const TagSelector = ({
      * Lưu giá trị input
      */
     if (tag.type !== 'more') {
-      setInput((prev) => {
+      setInput((prev: string) => {
         const regex = /@\w+\s/;
         return regex.test(prev)
           ? prev.replace(regex, `@${tag.type} `)

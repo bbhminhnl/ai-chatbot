@@ -1,0 +1,48 @@
+.glow-box {
+  width: 100%;
+  height: 100%;
+  background: #1a1a1a;
+  //   border: 2px solid transparent;
+  border-radius: 20px;
+  position: relative;
+  //   animation: glow 2s linear infinite;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    // z-index: -1;
+    // background: linear-gradient(45deg, #00f0ff, #ff00f7, #00ff6a, #00f0ff);
+    background: #fffef566;
+    background-size: 400%;
+    border-radius: 22px;
+    // animation: glow-animate 8s linear infinite;
+    filter: blur(40px);
+    opacity: 0.4;
+  }
+}
+
+@keyframes glow-animate {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes glow {
+  0%,
+  100% {
+    box-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 30px #0ff;
+  }
+  50% {
+    box-shadow: 0 0 20px #f0f, 0 0 30px #f0f, 0 0 40px #f0f;
+  }
+}
