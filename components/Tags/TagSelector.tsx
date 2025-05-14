@@ -132,7 +132,7 @@ export const TagSelector = ({
       {is_conversation ? (
         <div className="flex flex-row gap-2 py-2 overflow-x-auto">
           {SELECTED_TAGS.map((tag, index) => (
-            <div key={index} className="p-0 w-full">
+            <div key={index} className="p-0 w-full md:w-[250px]">
               <SelectedTag
                 type={tag.type}
                 label={tag.label}
