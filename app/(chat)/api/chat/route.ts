@@ -104,7 +104,7 @@ export async function POST(request: Request) {
         message,
       });
       // let title = 'Search for a topic';
-      console.log(title, 'title')
+      console.log(title, 'title');
       await saveChat({
         id,
         userId: session.user.id,

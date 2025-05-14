@@ -1,24 +1,25 @@
 'use client';
 
-import type { UIMessage } from 'ai';
-import cx from 'classnames';
 import { AnimatePresence, motion } from 'framer-motion';
-import { memo, useState } from 'react';
-import type { Vote } from '@/lib/db/schema';
 import { DocumentToolCall, DocumentToolResult } from './document';
 import { PencilEditIcon, SparklesIcon } from './icons';
+import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
+import { cn, sanitizeText } from '@/lib/utils';
+import { memo, useState } from 'react';
+
+import { Button } from './ui/button';
+import { DocumentPreview } from './document-preview';
 import { Markdown } from './markdown';
 import { MessageActions } from './message-actions';
-import { PreviewAttachment } from './preview-attachment';
-import { Weather } from './weather';
-import equal from 'fast-deep-equal';
-import { cn, sanitizeText } from '@/lib/utils';
-import { Button } from './ui/button';
-import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { MessageEditor } from './message-editor';
-import { DocumentPreview } from './document-preview';
 import { MessageReasoning } from './message-reasoning';
+import { PreviewAttachment } from './preview-attachment';
+import type { UIMessage } from 'ai';
 import type { UseChatHelpers } from '@ai-sdk/react';
+import type { Vote } from '@/lib/db/schema';
+import { Weather } from './weather';
+import cx from 'classnames';
+import equal from 'fast-deep-equal';
 
 const PurePreviewMessage = ({
   chatId,

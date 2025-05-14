@@ -15,6 +15,7 @@ import type { VisibilityType } from './visibility-selector';
 import type { Vote } from '@/lib/db/schema';
 import { getChatHistoryPaginationKey } from './sidebar-history';
 import styles from './GradientCardStatic/GradientCard.module.scss';
+import { title } from 'process';
 import { toast } from './toast';
 import { unstable_serialize } from 'swr/infinite';
 import { useArtifactSelector } from '@/hooks/use-artifact';
@@ -141,17 +142,19 @@ export function Chat({
           session={session}
         />
 
-        <div className=" flex flex-col md:items-center md:justify-center justify-between flex-grow min-h-0">
-          <Messages
-            chatId={id}
-            status={status}
-            votes={votes}
-            messages={messages}
-            setMessages={setMessages}
-            reload={reload}
-            isReadonly={isReadonly}
-            isArtifactVisible={IS_ARTIFACT_VISIBLE}
-          />
+        <div className="flex flex-col md:items-center md:justify-center justify-between flex-grow min-h-0 h-full">
+          <div className="flex flex-grow overflow-hidden min-h-0 h-full w-full">
+            <Messages
+              chatId={id}
+              status={status}
+              votes={votes}
+              messages={messages}
+              setMessages={setMessages}
+              reload={reload}
+              isReadonly={isReadonly}
+              isArtifactVisible={IS_ARTIFACT_VISIBLE}
+            />
+          </div>
           <form className="flex mx-auto px-3 bg-background pb-3 md:pb-6 gap-2 w-full md:max-w-3xl">
             {!isReadonly && (
               <MultimodalInput

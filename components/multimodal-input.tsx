@@ -51,7 +51,7 @@ declare global {
   }
 }
 
-// Định nghĩa cho SpeechRecognitionEvent
+/** Định nghĩa cho SpeechRecognitionEvent */
 interface SpeechRecognitionAlternative {
   transcript: string;
   confidence: number;
@@ -73,7 +73,7 @@ interface SpeechRecognitionEvent extends Event {
   readonly results: SpeechRecognitionResultList;
 }
 
-// Instance type: đối tượng thực khi gọi new SpeechRecognition()
+/** Instance type: đối tượng thực khi gọi new SpeechRecognition() */
 interface ISpeechRecognition extends EventTarget {
   start: () => void;
   stop: () => void;
@@ -84,7 +84,7 @@ interface ISpeechRecognition extends EventTarget {
   interimResults: boolean;
 }
 
-// Constructor type: lớp khởi tạo SpeechRecognition
+/** Constructor type: lớp khởi tạo SpeechRecognition */
 interface SpeechRecognitionConstructor {
   new (): ISpeechRecognition;
 }
@@ -459,50 +459,12 @@ function PureMultimodalInput({
 
       {/** Smart prompts suggestions */}
 
-      {/* <div className="flex flex-row flex-grow min-h-0 overflow-hidden overflow-x-auto gap-2 bg-transparent py-2 ">
-        {LIST_TAGS.map((tag, index) => (
-          <TagWithIcon
-            // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-            key={index}
-            type={tag.type}
-            label={tag.label}
-            onClick={() => {
-              if (tag.type === suggested_mode) {
-                // Bỏ chọn nếu tag đã active
-                setSuggestedMode('');
-                setInput((prev) => {
-                  const regex = new RegExp(`@${tag.type}\\s`);
-                  return prev.replace(regex, '');
-                });
-                return;
-              }
-
-              setSuggestedMode(tag.type);
-
-              if (tag.type === 'more') {
-                return;
-              }
-
-              setInput((prev) => {
-                const regex = /@\w+\s/; // Tìm bất kỳ tag nào dạng @type
-                if (regex.test(prev)) {
-                  // biome-ignore lint/style/useTemplate: <explanation>
-                  return prev.replace(regex, '@' + tag.type + ' ');
-                } else {
-                  // biome-ignore lint/style/useTemplate: <explanation>
-                  return '@' + tag.type + ' ' + prev;
-                }
-              });
-            }}
-            is_active={suggested_mode === tag.type}
-          />
-        ))}
-      </div> */}
       <TagSelector
         LIST_TAGS={LIST_TAGS}
         suggested_mode={suggested_mode}
         setSuggestedMode={setSuggestedMode}
         setInput={setInput}
+        is_conversation={messages.length > 0}
       />
 
       <input
@@ -586,12 +548,12 @@ function PureMultimodalInput({
                 /**
                  * Nếu dang nghe thi dung, nguoc lai bat dau nghe
                  */
-                if (is_listening) {
-                  RECOGNITION_REF.current?.stop(); // Dừng và sẽ kích hoạt .onresult
-                } else {
-                  RECOGNITION_REF.current?.start(); // Bắt đầu nghe
-                  setIsListening(true);
-                }
+                // if (is_listening) {
+                //   RECOGNITION_REF.current?.stop(); // Dừng và sẽ kích hoạt .onresult
+                // } else {
+                //   RECOGNITION_REF.current?.start(); // Bắt đầu nghe
+                //   setIsListening(true);
+                // }
               }}
               className="p-2 bg-white rounded-full cursor-pointer"
             >

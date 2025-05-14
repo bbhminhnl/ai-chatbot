@@ -10,8 +10,8 @@ import {
 import React from 'react';
 
 const TagWithIcon = ({
-  type = 'brand-boosting',
-  label = 'Brand Boosting',
+  type = '',
+  label = '',
   className,
   is_active,
   ...props
